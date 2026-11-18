@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class Rapat extends Model
 {
@@ -36,14 +37,11 @@ class Rapat extends Model
     // Otomatis ikut tampil di toArray()/JSON response API
     protected $appends = ['status_otomatis'];
 
-    protected static function booted(): void
+    protected static function sqlWaktuSelesai(): string
     {
-        // Generate slug otomatis jika belum diisi
-        static::creating(function (Rapat $rapat) {
-            if (empty($rapat->slug)) {
-                $rapat->slug = Str::slug($rapat->judul_rapat) . '-' . Str::lower(Str::random(6));
-            }
-        });
+        return DB::connection()->getDriverName() === 'pgsql'
+            ? '(tanggal_rapat + jam_selesai)'
+            : 'TIMESTAMP(tanggal_rapat, jam_selesai)';
     }
 
     // Route model binding pakai slug: /rapat/{rapat:slug} atau otomatis di bawah
@@ -86,23 +84,25 @@ class Rapat extends Model
     public function scopeAktif(Builder $query): Builder
     {
         return $query->where('status', 'aktif')
-            ->whereRaw('TIMESTAMP(tanggal_rapat, jam_selesai) >= ?', [now()->toDateTimeString()]);
+            ->whereRaw(static::sqlWaktuSelesai() . ' >= ?', [now()->toDateTimeString()]);
     }
 
     public function scopeSelesai(Builder $query): Builder
     {
         return $query->where(function (Builder $q) {
             $q->where('status', 'selesai')
-            ->orWhereRaw('TIMESTAMP(tanggal_rapat, jam_selesai) < ?', [now()->toDateTimeString()]);
+            ->orWhereRaw(static::sqlWaktuSelesai() . ' < ?', [now()->toDateTimeString()]);
         });
     }
 
     public function scopeCari(Builder $query, ?string $keyword): Builder
     {
-        return $query->when($keyword, function (Builder $q) use ($keyword) {
-            $q->where(function (Builder $q) use ($keyword) {
-                $q->where('judul_rapat', 'like', "%{$keyword}%")
-                ->orWhere('penyelenggara', 'like', "%{$keyword}%");
+        $op = DB::connection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+
+        return $query->when($keyword, function (Builder $q) use ($keyword, $op) {
+            $q->where(function (Builder $q) use ($keyword, $op) {
+                $q->where('judul_rapat', $op, "%{$keyword}%")
+                ->orWhere('penyelenggara', $op, "%{$keyword}%");
             });
         });
     }
