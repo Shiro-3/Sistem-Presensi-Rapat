@@ -64,8 +64,10 @@ class AdminController extends Controller
 
     public function store(StoreRapatRequest $request): RedirectResponse
     {
-        // slug dibuat otomatis oleh event creating() di model Rapat
-        $rapat = Rapat::create($request->validated() + ['status' => 'aktif']);
+        $rapat = new Rapat($request->validated());
+        $rapat->slug   = (Str::slug($rapat->judul_rapat) ?: 'rapat') . '-' . Str::lower(Str::random(6));
+        $rapat->status = 'aktif';
+        $rapat->save();
 
         return redirect()
             ->route('admin.rapat.show', $rapat->id)

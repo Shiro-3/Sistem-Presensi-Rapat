@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Rapat extends Model
 {
     use HasFactory;
+
+    public const TIPE_LOKASI = ['Daring', 'Luring', 'Daring & Luring'];
 
     protected $table = 'rapats';
 
@@ -31,20 +33,20 @@ class Rapat extends Model
     protected $casts = [
         'tanggal_rapat' => 'date:Y-m-d',
     ];
-    
-    public const TIPE_LOKASI = ['Daring', 'Luring', 'Daring & Luring'];
 
-    // Otomatis ikut tampil di toArray()/JSON response API
     protected $appends = ['status_otomatis'];
 
-    protected static function sqlWaktuSelesai(): string
+    protected static function booted(): void
     {
-        return DB::connection()->getDriverName() === 'pgsql'
-            ? '(tanggal_rapat + jam_selesai)'
-            : 'TIMESTAMP(tanggal_rapat, jam_selesai)';
+        // Buat slug otomatis jika belum diisi
+        static::creating(function (Rapat $rapat) {
+            if (empty($rapat->slug)) {
+                $rapat->slug = (Str::slug($rapat->judul_rapat) ?: 'rapat')
+                    . '-' . Str::lower(Str::random(6));
+            }
+        });
     }
 
-    // Route model binding pakai slug: /rapat/{rapat:slug} atau otomatis di bawah
     public function getRouteKeyName(): string
     {
         return 'slug';
@@ -55,22 +57,16 @@ class Rapat extends Model
         return $this->hasMany(Absensi::class, 'rapat_id');
     }
 
-    /**
-     * Status otomatis: 'selesai' jika sekarang sudah lewat
-     * gabungan tanggal_rapat + jam_selesai, selain itu ikuti status asli.
-     */
+    /** 'selesai' jika sekarang sudah lewat tanggal_rapat + jam_selesai, selain itu ikut status asli */
     public function getStatusOtomatisAttribute(): string
     {
         $waktuSelesai = Carbon::parse(
             $this->tanggal_rapat->format('Y-m-d') . ' ' . $this->jam_selesai
         );
 
-        if (Carbon::now()->greaterThan($waktuSelesai)) {
-            return 'selesai';
-        }
-
-        return $this->status;
+        return Carbon::now()->greaterThan($waktuSelesai) ? 'selesai' : $this->status;
     }
+
     public function isAktif(): bool
     {
         return $this->status_otomatis === 'aktif';
@@ -79,6 +75,13 @@ class Rapat extends Model
     public function getStatusLabelAttribute(): string
     {
         return $this->status_otomatis === 'aktif' ? 'Aktif' : 'Rapat Selesai';
+    }
+
+    protected static function sqlWaktuSelesai(): string
+    {
+        return DB::connection()->getDriverName() === 'pgsql'
+            ? '(tanggal_rapat + jam_selesai)'
+            : 'TIMESTAMP(tanggal_rapat, jam_selesai)';
     }
 
     public function scopeAktif(Builder $query): Builder
@@ -91,7 +94,7 @@ class Rapat extends Model
     {
         return $query->where(function (Builder $q) {
             $q->where('status', 'selesai')
-            ->orWhereRaw(static::sqlWaktuSelesai() . ' < ?', [now()->toDateTimeString()]);
+              ->orWhereRaw(static::sqlWaktuSelesai() . ' < ?', [now()->toDateTimeString()]);
         });
     }
 
@@ -102,7 +105,7 @@ class Rapat extends Model
         return $query->when($keyword, function (Builder $q) use ($keyword, $op) {
             $q->where(function (Builder $q) use ($keyword, $op) {
                 $q->where('judul_rapat', $op, "%{$keyword}%")
-                ->orWhere('penyelenggara', $op, "%{$keyword}%");
+                  ->orWhere('penyelenggara', $op, "%{$keyword}%");
             });
         });
     }
