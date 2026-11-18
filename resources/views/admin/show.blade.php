@@ -25,7 +25,6 @@
                         {{ $rapat->status_label }}
                     </span>
                     <h1 class="h5 fw-bold mb-1">{{ $rapat->judul_rapat }}</h1>
-                    <p class="text-secondary mb-0"><i class="bi bi-building me-1"></i>{{ $rapat->penyelenggara }}</p>
                 </div>
                 <div class="d-flex flex-wrap gap-2 align-self-start">
                     <button type="button" class="btn btn-outline-secondary" id="btnSalin"

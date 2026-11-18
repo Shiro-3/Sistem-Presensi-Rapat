@@ -17,7 +17,6 @@ class StoreRapatRequest extends FormRequest
     {
         return [
             'judul_rapat'   => ['required', 'string', 'max:255'],
-            'penyelenggara' => ['required', 'string', 'max:255'],
             'tanggal_rapat' => ['required', 'date'],
             'jam_mulai'     => ['required', 'date_format:H:i'],
             'jam_selesai'   => ['required', 'date_format:H:i', 'after:jam_mulai'],

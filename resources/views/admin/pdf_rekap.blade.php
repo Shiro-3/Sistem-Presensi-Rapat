@@ -64,10 +64,8 @@
     {{-- Informasi rapat --}}
     <table class="info">
         <tr><td class="label">Judul Rapat</td><td class="sep">:</td><td><strong>{{ $rapat->judul_rapat }}</strong></td></tr>
-        <tr><td class="label">Penyelenggara</td><td class="sep">:</td><td>{{ $rapat->penyelenggara }}</td></tr>
         <tr><td class="label">Hari / Tanggal</td><td class="sep">:</td><td>{{ $rapat->tanggal_rapat->translatedFormat('l, d F Y') }}</td></tr>
         <tr><td class="label">Waktu</td><td class="sep">:</td><td>{{ substr($rapat->jam_mulai, 0, 5) }} – {{ substr($rapat->jam_selesai, 0, 5) }} WIB</td></tr>
-        <tr><td class="label">Tempat / Media</td><td class="sep">:</td><td>{{ $rapat->tipe_lokasi }} — {!! nl2br(e($rapat->detail_lokasi)) !!}</td></tr>
         <tr><td class="label">Jumlah Hadir</td><td class="sep">:</td><td>{{ $absensis->count() }} orang</td></tr>
     </table>
 

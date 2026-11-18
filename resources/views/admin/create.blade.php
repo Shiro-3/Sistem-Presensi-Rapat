@@ -18,13 +18,6 @@
                     @error('judul_rapat') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
-                <div class="mb-3">
-                    <label for="penyelenggara" class="form-label">Penyelenggara <span class="text-danger">*</span></label>
-                    <input type="text" id="penyelenggara" name="penyelenggara" maxlength="255" value="{{ old('penyelenggara') }}"
-                           class="form-control @error('penyelenggara') is-invalid @enderror" required>
-                    @error('penyelenggara') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                </div>
-
                 <div class="row g-3 mb-3">
                     <div class="col-12 col-md-4">
                         <label for="tanggal_rapat" class="form-label">Tanggal <span class="text-danger">*</span></label>

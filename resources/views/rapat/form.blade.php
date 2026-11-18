@@ -26,7 +26,7 @@
                 <i class="bi bi-circle-fill me-1" style="font-size:.45rem"></i>{{ $rapat->status_label }}
             </span>
             <h1 class="h5 fw-bold mb-1">{{ $rapat->judul_rapat }}</h1>
-            <p class="text-secondary small mb-3"><i class="bi bi-building me-1"></i>{{ $rapat->penyelenggara }}</p>
+            
 
             <div class="row g-2 small">
                 <div class="col-12 col-sm-6"><i class="bi bi-calendar-event me-2 text-primary"></i>{{ $rapat->tanggal_rapat->translatedFormat('l, d F Y') }}</div>

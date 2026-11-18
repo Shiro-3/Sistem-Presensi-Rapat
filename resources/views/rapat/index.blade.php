@@ -41,7 +41,7 @@
                 };
             @endphp
             <div class="col-12 col-md-6 col-lg-4 rapat-item"
-                 data-search="{{ $rapat->judul_rapat }} {{ $rapat->penyelenggara }}">
+                 data-search="{{ $rapat->judul_rapat }}">
                 <div class="card rapat-card h-100 border-0 shadow-sm">
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -54,9 +54,6 @@
                         </div>
 
                         <h2 class="h6 fw-bold mb-1">{{ $rapat->judul_rapat }}</h2>
-                        <p class="text-secondary small mb-3">
-                            <i class="bi bi-building me-1"></i>{{ $rapat->penyelenggara }}
-                        </p>
 
                         <ul class="list-unstyled small mb-3">
                             <li class="mb-1"><i class="bi bi-calendar-event me-2 text-primary"></i>{{ $rapat->tanggal_rapat->translatedFormat('l, d F Y') }}</li>

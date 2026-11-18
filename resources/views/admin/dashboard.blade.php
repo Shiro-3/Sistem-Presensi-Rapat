@@ -37,7 +37,7 @@
     <form method="GET" action="{{ route('admin.dashboard') }}" class="row g-2 mb-3">
         <div class="col-12 col-md">
             <input type="search" name="q" value="{{ $search }}" class="form-control"
-                   placeholder="Cari judul atau penyelenggara…">
+                   placeholder="Cari judul rapat…">
         </div>
         <div class="col-8 col-md-3">
             <select name="status" class="form-select">
@@ -72,7 +72,6 @@
                             <a href="{{ route('admin.rapat.show', $rapat->id) }}" class="fw-semibold text-decoration-none">
                                 {{ $rapat->judul_rapat }}
                             </a>
-                            <div class="small text-secondary">{{ $rapat->penyelenggara }}</div>
                         </td>
                         <td class="small text-nowrap">
                             {{ $rapat->tanggal_rapat->translatedFormat('d M Y') }}<br>

@@ -21,7 +21,6 @@ class Rapat extends Model
     protected $fillable = [
         'slug',
         'judul_rapat',
-        'penyelenggara',
         'tanggal_rapat',
         'jam_mulai',
         'jam_selesai',
@@ -104,8 +103,7 @@ class Rapat extends Model
 
         return $query->when($keyword, function (Builder $q) use ($keyword, $op) {
             $q->where(function (Builder $q) use ($keyword, $op) {
-                $q->where('judul_rapat', $op, "%{$keyword}%")
-                  ->orWhere('penyelenggara', $op, "%{$keyword}%");
+                $q->where('judul_rapat', $op, "%{$keyword}%");
             });
         });
     }
