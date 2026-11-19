@@ -19,4 +19,5 @@ return new class extends Migration
             $table->string('penyelenggara')->nullable()->after('judul_rapat');
         });
     }
+    
 };

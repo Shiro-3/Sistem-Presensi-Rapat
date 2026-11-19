@@ -57,7 +57,6 @@
                     <tr>
                         <th style="width:50px">No</th>
                         <th>Nama</th>
-                        <th>NIP</th>
                         <th>Jabatan</th>
                         <th>Unit Kerja</th>
                         <th>Waktu Hadir</th>
@@ -69,7 +68,6 @@
                     <tr>
                         <td>{{ $absensis->firstItem() + $loop->index }}</td>
                         <td class="fw-semibold">{{ $a->nama_lengkap }}</td>
-                        <td>{{ $a->nip ?: '-' }}</td>
                         <td>{{ $a->jabatan }}</td>
                         <td>{{ $a->unit_kerja }}</td>
                         <td class="small text-nowrap">
@@ -83,7 +81,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="text-center text-secondary py-5">Belum ada peserta yang hadir.</td></tr>
+                    <tr><td colspan="6" class="text-center text-secondary py-5">Belum ada peserta yang hadir.</td></tr>
                 @endforelse
                 </tbody>
             </table>

@@ -64,19 +64,21 @@ class RapatController extends Controller
         if (! $rapat->isAktif()) {
             return response()->view('rapat.ditutup', compact('rapat'), 403);
         }
-
         $data = $request->validated();
 
-        // Cegah presensi ganda dengan NIP/NIK yang sama pada rapat yang sama
-        if (! empty($data['nip'])
-            && $rapat->absensis()->where('nip', $data['nip'])->exists()) {
+        $sudahAda = $rapat->absensis()
+            ->whereRaw('LOWER(nama_lengkap) = ?', [mb_strtolower(trim($data['nama_lengkap']))])
+            ->whereRaw('LOWER(unit_kerja) = ?', [mb_strtolower(trim($data['unit_kerja']))])
+            ->exists();
+
+        if ($sudahAda) {
             return back()
-                ->withInput($request->except('tanda_tangan')) // jangan flash base64 besar ke session
-                ->withErrors(['nip' => 'NIP/NIK ini sudah tercatat hadir pada rapat ini.']);
+                ->withInput($request->except('tanda_tangan'))
+                ->withErrors(['nama_lengkap' => 'Nama ini sudah tercatat hadir pada rapat ini.']);
         }
 
         $rapat->absensis()->create([
-            ...$data,
+            ...$request->validated(),
             'waktu_hadir' => now(),
         ]);
 

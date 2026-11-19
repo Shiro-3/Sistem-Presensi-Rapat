@@ -63,14 +63,6 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="nip" class="form-label">NIP<span class="text-danger">*</span></label>
-                    <input type="text" id="nip" name="nip" maxlength="50" inputmode="numeric"
-                           class="form-control form-control-lg @error('nip') is-invalid @enderror"
-                           value="{{ old('nip') }}" autocomplete="off">
-                    @error('nip') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                </div>
-
-                <div class="mb-3">
                     <label for="jabatan" class="form-label">Jabatan <span class="text-danger">*</span></label>
                     <input type="text" id="jabatan" name="jabatan" maxlength="255"
                            class="form-control form-control-lg @error('jabatan') is-invalid @enderror"

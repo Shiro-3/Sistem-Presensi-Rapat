@@ -82,7 +82,7 @@ class AdminController extends Controller
         // Kolom tanda_tangan (base64) sengaja tidak dimuat di daftar agar halaman ringan;
         // gambarnya diambil per baris lewat route admin.absensi.ttd.
         $absensis = $rapat->absensis()
-            ->select(['id', 'rapat_id', 'nama_lengkap', 'nip', 'jabatan', 'unit_kerja', 'waktu_hadir'])
+            ->select(['id', 'rapat_id', 'nama_lengkap', 'jabatan', 'unit_kerja', 'waktu_hadir'])
             ->orderBy('waktu_hadir')
             ->paginate(25);
 

@@ -15,7 +15,6 @@ class StorePresensiRequest extends FormRequest
     {
         return [
             'nama_lengkap' => ['required', 'string', 'max:255'],
-            'nip'          => ['required', 'string', 'max:50'],
             'jabatan'      => ['required', 'string', 'max:255'],
             'unit_kerja'   => ['required', 'string', 'max:255'],
             'tanda_tangan' => [
@@ -42,7 +41,6 @@ class StorePresensiRequest extends FormRequest
     {
         return [
             'nama_lengkap' => 'nama lengkap',
-            'nip'      => 'NIP',
             'unit_kerja'   => 'unit kerja',
             'tanda_tangan' => 'tanda tangan',
         ];
