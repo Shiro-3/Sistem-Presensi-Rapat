@@ -7,15 +7,6 @@
         @page { margin: 36px 40px 56px 40px; }
         body { font-family: 'Helvetica', sans-serif; font-size: 10px; color: #111; }
 
-        /* Kop instansi */
-        .kop { width: 100%; border-collapse: collapse; border-bottom: 3px double #000; margin-bottom: 14px; }
-        .kop td { padding-bottom: 8px; vertical-align: middle; }
-        .kop .logo { width: 80px; }
-        .kop .logo img { width: 70px; }
-        .kop .teks { text-align: center; }
-        .kop .nama { font-size: 20px; font-weight: bold; text-transform: uppercase; color: #0000ff; }
-        .kop .unit { font-size: 12px; font-weight: medium; color: #0000ff; }
-        .kop .alamat { font-size: 9px; color: #333; }
 
         h1.judul { text-align: center; font-size: 13px; margin: 0 0 12px; text-transform: uppercase; text-decoration: underline; }
 
@@ -38,21 +29,6 @@
     </style>
 </head>
 <body>
-
-    {{-- Kop instansi --}}
-    <table class="kop">
-        <tr>
-            <td class="logo">
-                @if ($logo) <img src="{{ $logo }}" alt="Logo"> @endif
-            </td>
-            <td class="teks">
-                <div class="nama">{!! str_replace('|', '<br>', e($instansi['nama'])) !!}</div>
-                <div class="unit">{{ $instansi['unit'] }}</div>
-                <div class="alamat">{{ $instansi['alamat'] }}<br>{{ $instansi['kontak'] }}</div>
-            </td>
-            <td class="logo"></td>
-        </tr>
-    </table>
 
     <h1 class="judul">Daftar Hadir Rapat</h1>
 
