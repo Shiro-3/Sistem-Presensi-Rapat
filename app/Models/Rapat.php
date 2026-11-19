@@ -26,11 +26,13 @@ class Rapat extends Model
         'jam_selesai',
         'tipe_lokasi',
         'detail_lokasi',
+        'minta_foto',
         'status',
     ];
 
     protected $casts = [
         'tanggal_rapat' => 'date:Y-m-d',
+        'minta_foto'   => 'boolean',
     ];
 
     protected $appends = ['status_otomatis'];

@@ -6,6 +6,8 @@
 <style>
     .ttd-thumb { height: 40px; width: auto; background: #fff; border: 1px solid #dee2e6;
         border-radius: .375rem; padding: 2px; cursor: zoom-in; }
+    .foto-thumb { height: 48px; width: 48px; object-fit: cover; border: 1px solid #dee2e6;
+        border-radius: .375rem; cursor: zoom-in; }
 </style>
 @endpush
 
@@ -24,7 +26,12 @@
                     <span class="badge rounded-pill {{ $rapat->isAktif() ? 'text-bg-success' : 'text-bg-secondary' }} mb-2">
                         {{ $rapat->status_label }}
                     </span>
-                    <h1 class="h5 fw-bold mb-1">{{ $rapat->judul_rapat }}</h1>
+                    @if ($rapat->minta_foto)
+                        <span class="badge rounded-pill text-bg-info mb-2">
+                            <i class="bi bi-camera me-1"></i>Foto bukti diminta
+                        </span>
+                    @endif
+                    <h1 class="h5 fw-bold mb-0">{{ $rapat->judul_rapat }}</h1>
                 </div>
                 <div class="d-flex flex-wrap gap-2 align-self-start">
                     <button type="button" class="btn btn-outline-secondary" id="btnSalin"
@@ -61,6 +68,9 @@
                         <th>Unit Kerja</th>
                         <th>Waktu Hadir</th>
                         <th>Tanda Tangan</th>
+                        @if ($rapat->minta_foto)
+                            <th>Foto</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -76,12 +86,23 @@
                         </td>
                         <td>
                             <img src="{{ route('admin.absensi.ttd', $a->id) }}" loading="lazy"
-                                 class="ttd-thumb" alt="Tanda tangan {{ $a->nama_lengkap }}"
-                                 data-nama="{{ $a->nama_lengkap }}">
+                                 class="ttd-thumb preview-img" alt="Tanda tangan {{ $a->nama_lengkap }}"
+                                 data-nama="{{ $a->nama_lengkap }}" data-jenis="Tanda tangan">
                         </td>
+                        @if ($rapat->minta_foto)
+                            <td>
+                                <img src="{{ route('admin.absensi.foto', $a->id) }}" loading="lazy"
+                                     class="foto-thumb preview-img" alt="Foto {{ $a->nama_lengkap }}"
+                                     data-nama="{{ $a->nama_lengkap }}" data-jenis="Foto">
+                            </td>
+                        @endif
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="text-center text-secondary py-5">Belum ada peserta yang hadir.</td></tr>
+                    <tr>
+                        <td colspan="{{ $rapat->minta_foto ? 7 : 6 }}" class="text-center text-secondary py-5">
+                            Belum ada peserta yang hadir.
+                        </td>
+                    </tr>
                 @endforelse
                 </tbody>
             </table>
@@ -92,16 +113,16 @@
         {{ $absensis->links('pagination::bootstrap-5') }}
     </div>
 
-    {{-- Modal pratinjau tanda tangan --}}
-    <div class="modal fade" id="ttdModal" tabindex="-1" aria-hidden="true">
+    {{-- Modal pratinjau (tanda tangan & foto) --}}
+    <div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title fs-6" id="ttdModalTitle">Tanda Tangan</h2>
+                    <h2 class="modal-title fs-6" id="previewModalTitle">Pratinjau</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <img id="ttdModalImg" src="" alt="Tanda tangan" class="img-fluid border rounded bg-white">
+                    <img id="previewModalImg" src="" alt="Pratinjau" class="img-fluid border rounded bg-white">
                 </div>
             </div>
         </div>
@@ -111,13 +132,12 @@
 @push('scripts')
 <script>
 (() => {
-    // Pratinjau tanda tangan
-    const modalEl = document.getElementById('ttdModal');
-    const modal   = new bootstrap.Modal(modalEl);
-    document.querySelectorAll('.ttd-thumb').forEach(img => {
+    // Pratinjau tanda tangan / foto
+    const modal = new bootstrap.Modal(document.getElementById('previewModal'));
+    document.querySelectorAll('.preview-img').forEach(img => {
         img.addEventListener('click', () => {
-            document.getElementById('ttdModalImg').src = img.src;
-            document.getElementById('ttdModalTitle').textContent = 'Tanda tangan: ' + img.dataset.nama;
+            document.getElementById('previewModalImg').src = img.src;
+            document.getElementById('previewModalTitle').textContent = img.dataset.jenis + ': ' + img.dataset.nama;
             modal.show();
         });
     });

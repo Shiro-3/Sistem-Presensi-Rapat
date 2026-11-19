@@ -65,8 +65,9 @@ class AdminController extends Controller
     public function store(StoreRapatRequest $request): RedirectResponse
     {
         $rapat = new Rapat($request->validated());
-        $rapat->slug   = (Str::slug($rapat->judul_rapat) ?: 'rapat') . '-' . Str::lower(Str::random(6));
-        $rapat->status = 'aktif';
+        $rapat->slug       = (Str::slug($rapat->judul_rapat) ?: 'rapat') . '-' . Str::lower(Str::random(6));
+        $rapat->status     = 'aktif';
+        $rapat->minta_foto = $request->boolean('minta_foto') ? 1 : 0;
         $rapat->save();
 
         return redirect()
@@ -91,10 +92,20 @@ class AdminController extends Controller
 
     /** Menyajikan gambar tanda tangan (hanya untuk admin yang login) */
     /** Menyajikan gambar tanda tangan (hanya untuk admin yang login) */
+    /** Menyajikan gambar tanda tangan (hanya untuk admin yang login) */
     public function tandaTangan(int $id): Response
     {
-        $raw = Absensi::select(['id', 'tanda_tangan'])->findOrFail($id)->tanda_tangan;
+        return $this->gambarResponse(Absensi::select(['id', 'tanda_tangan'])->findOrFail($id)->tanda_tangan);
+    }
 
+    /** Menyajikan foto bukti kehadiran (hanya untuk admin yang login) */
+    public function foto(int $id): Response
+    {
+        return $this->gambarResponse(Absensi::select(['id', 'foto'])->findOrFail($id)->foto);
+    }
+
+    private function gambarResponse(?string $raw): Response
+    {
         if (blank($raw)) {
             abort(404);
         }

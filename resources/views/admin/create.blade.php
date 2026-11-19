@@ -59,6 +59,19 @@
                     @error('detail_lokasi') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
+                <div class="mb-4">
+                    <input type="hidden" name="minta_foto" value="0">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="minta_foto"
+                            name="minta_foto" value="1" @checked(old('minta_foto'))>
+                        <label class="form-check-label" for="minta_foto">Minta foto bukti kehadiran dari peserta</label>
+                    </div>
+                    <div class="form-text">
+                        Jika aktif, peserta wajib mengambil foto lewat kamera perangkat, selain tanda tangan.
+                        Pilihan ini ditentukan saat rapat dibuat.
+                    </div>
+                </div>
+
                 <div class="d-flex gap-2 justify-content-end">
                     <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary">Batal</a>
                     <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i>Simpan Rapat</button>

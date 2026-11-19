@@ -18,6 +18,7 @@ class Absensi extends Model
         'jabatan',
         'unit_kerja',
         'tanda_tangan',
+        'foto',
         'waktu_hadir',
     ];
 

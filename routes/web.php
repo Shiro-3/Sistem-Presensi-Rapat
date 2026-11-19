@@ -55,4 +55,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/absensi/{id}/tanda-tangan', [AdminController::class, 'tandaTangan'])
         ->whereNumber('id')
         ->name('absensi.ttd');
+    Route::get('/absensi/{id}/foto', [AdminController::class, 'foto'])
+        ->whereNumber('id')
+        ->name('absensi.foto');
 });
