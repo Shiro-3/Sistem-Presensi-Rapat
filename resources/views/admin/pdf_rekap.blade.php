@@ -9,7 +9,7 @@
         
         /* Kop instansi */
         .kop { width: 100%; table-layout: fixed; border-collapse: collapse; border-bottom: 3px double #000; margin: 0 0 14px 0; }
-        .kop td { padding: 0 0 5px 0; vertical-align: middle; }
+        .kop td { padding: 0 0 5px 0; vertical-align: left; }
         .kop .logo { width: 20%; text-align: center; }
         .kop .logo img { width: 127px; max-height: 95%; height: auto; }
         .kop .teks { width: 80%; text-align: center; padding-left: 3px; }
