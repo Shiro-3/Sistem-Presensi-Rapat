@@ -6,7 +6,18 @@
     <style>
         @page { margin: 36px 40px 56px 40px; }
         body { font-family: 'Helvetica', sans-serif; font-size: 10px; color: #111; }
-
+        
+        /* Kop instansi */
+        .kop { width: 100%; border-collapse: collapse; border-bottom: 3px double #000; margin-bottom: 14px; }
+        .kop td { padding-bottom: 8px; vertical-align: middle; }
+        .kop .logo { width: 80px; }
+        .kop .logo img { width: 70px; }
+        .kop .teks { text-align: center; }
+        .kop .nama1 { font-size: 14px; font-weight: bold; text-transform: uppercase; color: #0000ff; }
+        .kop .nama2 { font-size: 16px; font-weight: medium; text-transform: uppercase; color: #0000ff; }
+        .kop .unit { font-size: 14px; font-weight: bold; color: #0000ff; }
+        .kop .alamat { font-size: 9px; color: #333; }
+        .kop .kontak1, .kop .kontak2 { font-size: 10px; color: #333; }
 
         h1.judul { text-align: center; font-size: 13px; margin: 0 0 12px; text-transform: uppercase; text-decoration: underline; }
 
@@ -30,6 +41,24 @@
     </style>
 </head>
 <body>
+
+    {{-- Kop instansi --}}
+        <table class="kop">
+            <tr>
+                <td class="logo">
+                    @if ($logo) <img src="{{ $logo }}" alt="Logo"> @endif
+                </td>
+                <td class="teks">
+                    <div class="nama1">{!! str_replace('|', '<br>', e($instansi['nama1'])) !!}</div>
+                    <div class="nama2">{!! str_replace('|', '<br>', e($instansi['nama2'])) !!}</div>
+                    <div class="unit">{{ $instansi['unit'] }}</div>
+                    <div class="alamat">{{ $instansi['alamat'] }}</div>
+                    <div class="kontak1">{{ $instansi['kontak1'] }}</div>
+                    <div class="kontak2">{{ $instansi['kontak2'] }}</div>
+                </td>
+                <td class="logo"></td>
+            </tr>
+        </table>
 
     <h1 class="judul">Daftar Hadir Rapat</h1>
 

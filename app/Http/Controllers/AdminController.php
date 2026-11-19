@@ -183,6 +183,8 @@ class AdminController extends Controller
         $pdf = Pdf::loadView('admin.pdf_rekap', [
             'rapat'       => $rapat,
             'absensis'    => $rapat->absensis,
+            'instansi'    => config('instansi'),
+            'logo'        => $this->logoDataUri(),
             'dicetakOleh' => Auth::user()->name,
             'dicetakPada' => now(),
         ])->setPaper('a4', 'portrait');
@@ -207,6 +209,25 @@ class AdminController extends Controller
             ->toString();
 
         return $pdf->download('Rekap-Absensi-' . ($judul ?: 'Rapat') . '.pdf');
+    }
+    
+    /** Logo instansi sebagai data URI (lebih andal daripada path file di Windows) */
+    private function logoDataUri(): ?string
+    {
+        $logo = config('instansi.logo');
+        $path = $logo ? public_path($logo) : null;
+
+        if (! $path || ! is_file($path)) {
+            return null;
+        }
+
+        $mime = match (strtolower(pathinfo($path, PATHINFO_EXTENSION))) {
+            'png'         => 'image/png',
+            'jpg', 'jpeg' => 'image/jpeg',
+            default       => null,
+        };
+
+        return $mime ? 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($path)) : null;
     }
 
 }
