@@ -10,7 +10,7 @@
         /* Kop instansi */
         .kop { width: 100%; border-collapse: collapse; border-bottom: 3px double #000; margin-bottom: 14px; }
         .kop td { padding-bottom: 8px; vertical-align: middle; }
-        .kop .logo { width: 80px; }
+        .kop .logo { width: 95px; }
         .kop .logo img { width: 85px; }
         .kop .teks { text-align: center; }
         .kop .nama1 { font-size: 15px; font-weight: bold; text-transform: uppercase; color: #0000ff; }
