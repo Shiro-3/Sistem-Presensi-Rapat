@@ -13,10 +13,10 @@
         .kop .logo { width: 80px; }
         .kop .logo img { width: 70px; }
         .kop .teks { text-align: center; }
-        .kop .nama1 { font-size: 14px; font-weight: bold; text-transform: uppercase; color: #0000ff; }
-        .kop .nama2 { font-size: 16px; font-weight: medium; text-transform: uppercase; color: #0000ff; }
-        .kop .unit { font-size: 14px; font-weight: bold; color: #0000ff; }
-        .kop .alamat { font-size: 9px; color: #333; }
+        .kop .nama1 { font-size: 15px; font-weight: bold; text-transform: uppercase; color: #0000ff; }
+        .kop .nama2 { font-size: 16.5px; font-weight: medium; text-transform: uppercase; color: #0000ff; }
+        .kop .unit { font-size: 15px; font-weight: bold; color: #0000ff; }
+        .kop .alamat { font-size: 10px; color: #333; }
         .kop .kontak1, .kop .kontak2 { font-size: 10px; color: #333; }
 
         h1.judul { text-align: center; font-size: 13px; margin: 0 0 12px; text-transform: uppercase; text-decoration: underline; }
