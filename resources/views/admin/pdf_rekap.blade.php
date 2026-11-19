@@ -51,7 +51,7 @@
                 <td class="teks">
                     <div class="nama1">{!! str_replace('|', '<br>', e($instansi['nama1'])) !!}</div>
                     <div class="nama2">{!! str_replace('|', '<br>', e($instansi['nama2'])) !!}</div>
-                    <div class="unit">{{ $instansi['unit'] }}</div>
+                    <div class="unit">{{ str_replace('|', '<br>', e($instansi['unit'])) }}</div>
                     <div class="alamat">{{ $instansi['alamat'] }}</div>
                     <div class="kontak1">{{ $instansi['kontak1'] }}</div>
                     <div class="kontak2">{{ $instansi['kontak2'] }}</div>
