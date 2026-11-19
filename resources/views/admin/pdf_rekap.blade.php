@@ -13,6 +13,7 @@
         .kop .logo { width: 20%; text-align: center; }
         .kop .logo img { width: 127px; max-height: 95%; height: auto; }
         .kop .teks { width: 80%; text-align: center; padding-left: 3px; }
+        .kop .teks div { margin: 0; padding: 0; }
         .kop .nama1 { font-size: 16px; line-height: 1.15; font-weight: bold; text-transform: uppercase; color: #0000ff; }
         .kop .nama2 { font-size: 20px; line-height: 1.15; font-weight: medium; text-transform: uppercase; color: #0000ff; }
         .kop .unit { font-size: 16px; line-height: 1.15; font-weight: bold; text-transform: uppercase; color: #0000ff; }
