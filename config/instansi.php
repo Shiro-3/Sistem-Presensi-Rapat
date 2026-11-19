@@ -7,5 +7,5 @@ return [
     'alamat'  => env('INSTANSI_ALAMAT', 'JALAN MUTIARA NO. 1 LOMANIS KEC. CILACAP TENGAH KAB. CILACAP 53221'),
     'kontak1'  => env('INSTANSI_KONTAK1', 'TELEPON (0282) 5569112, FAKSIMILE (0282) 5569112'),
     'kontak2'  => env('INSTANSI_KONTAK2', 'LAMAN www.kkp.go.id. SUREL psdkp.cilacap@kkp.go.id'),
-    'logo'    => 'images/logo-KKP.jpg', // relatif terhadap folder public/, boleh dikosongkan
+    'logo'    => 'images/Logo-KKP.png', // relatif terhadap folder public/, boleh dikosongkan
 ];
