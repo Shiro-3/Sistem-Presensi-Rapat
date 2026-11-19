@@ -8,16 +8,16 @@
         body { font-family: 'Helvetica', sans-serif; font-size: 10px; color: #111; }
         
         /* Kop instansi */
-        .kop { width: 100%; border-collapse: collapse; border-bottom: 3px double #000; margin-bottom: 14px; }
-        .kop td { padding-bottom: 8px; vertical-align: middle; }
-        .kop .logo { width: 137px; }
-        .kop .logo img { width: 127px; }
-        .kop .teks { text-align: center; }
-        .kop .nama1 { font-size: 16px; font-weight: bold; text-transform: uppercase; color: #0000ff; }
-        .kop .nama2 { font-size: 20px; font-weight: medium; text-transform: uppercase; color: #0000ff; }
-        .kop .unit { font-size: 16px; font-weight: bold; color: #0000ff; }
-        .kop .alamat { font-size: 10px; color: #333; }
-        .kop .kontak1, .kop .kontak2 { font-size: 10px; color: #333; }
+        .kop { width: 100%; table-layout: fixed; border-collapse: collapse; border-bottom: 3px double #000; margin: 0 0 14px 0; }
+        .kop td { padding: 0 0 5px 0; vertical-align: middle; }
+        .kop .logo { width: 20%; text-align: center; }
+        .kop .logo img { width: 127px; max-height: 95%; height: auto; }
+        .kop .teks { width: 80%; text-align: center; padding-left: 3px; }
+        .kop .nama1 { font-size: 16px; line-height: 1.15; font-weight: bold; text-transform: uppercase; color: #0000ff; }
+        .kop .nama2 { font-size: 20px; line-height: 1.15; font-weight: medium; text-transform: uppercase; color: #0000ff; }
+        .kop .unit { font-size: 16px; line-height: 1.15; font-weight: bold; text-transform: uppercase; color: #0000ff; }
+        .kop .alamat { font-size: 10px; line-height: 1.2; color: #333; }
+        .kop .kontak1, .kop .kontak2 { font-size: 10px; line-height: 1.2; color: #333; }
 
         h1.judul { text-align: center; font-size: 13px; margin: 0 0 12px; text-transform: uppercase; text-decoration: underline; }
 
