@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>Rekap Absensi - {{ $rapat->judul_rapat }}</title>
     <style>
-        @page { margin: 26px 40px 56px 40px; }
+        @page { margin: 25px 40px 56px 40px; }
         body { font-family: 'Helvetica', sans-serif; font-size: 10px; color: #111; }
         
         /* Kop instansi */
         .kop { width: 100%; border-collapse: collapse; border-bottom: 3px double #000; margin-bottom: 14px; }
         .kop td { padding-bottom: 8px; vertical-align: middle; }
-        .kop .logo { width: 110px; }
-        .kop .logo img { width: 100px; }
+        .kop .logo { width: 137px; }
+        .kop .logo img { width: 127px; }
         .kop .teks { text-align: center; }
         .kop .nama1 { font-size: 16px; font-weight: bold; text-transform: uppercase; color: #0000ff; }
         .kop .nama2 { font-size: 20px; font-weight: medium; text-transform: uppercase; color: #0000ff; }
