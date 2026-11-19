@@ -12,7 +12,7 @@
     <div class="input-group input-group-lg mb-3 shadow-sm">
         <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-secondary"></i></span>
         <input type="search" id="searchInput" class="form-control border-start-0 ps-0"
-               placeholder="Cari judul atau penyelenggara…" value="{{ $search }}"
+               placeholder="Cari judul rapat…" value="{{ $search }}"
                autocomplete="off" aria-label="Cari rapat">
     </div>
 
