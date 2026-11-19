@@ -52,6 +52,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::post('/rapat', [AdminController::class, 'store'])->name('rapat.store');
     Route::get('/rapat/{id}', [AdminController::class, 'show'])->whereNumber('id')->name('rapat.show');
     Route::get('/rapat/{id}/pdf', [AdminController::class, 'exportPdf'])->whereNumber('id')->name('rapat.pdf');
+    Route::delete('/rapat', [AdminController::class, 'destroyMany'])->name('rapat.destroy-many');
+    Route::delete('/rapat/{id}', [AdminController::class, 'destroy'])->whereNumber('id')->name('rapat.destroy');
     Route::get('/absensi/{id}/tanda-tangan', [AdminController::class, 'tandaTangan'])
         ->whereNumber('id')
         ->name('absensi.ttd');

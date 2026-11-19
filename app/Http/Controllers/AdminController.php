@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -228,6 +229,45 @@ class AdminController extends Controller
         };
 
         return $mime ? 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($path)) : null;
+    }
+    /** Hapus satu rapat beserta seluruh data kehadirannya */
+    public function destroy(Request $request, int $id): RedirectResponse
+    {
+        $rapat = Rapat::findOrFail($id);
+
+        DB::transaction(function () use ($rapat) {
+            $rapat->absensis()->delete();
+            $rapat->delete();
+        });
+
+        return $this->kembaliKeDashboard($request)
+            ->with('success', "Rapat \"{$rapat->judul_rapat}\" berhasil dihapus.");
+    }
+
+    /** Hapus beberapa rapat sekaligus */
+    public function destroyMany(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids'   => ['required', 'array', 'min:1', 'max:100'],
+            'ids.*' => ['integer', 'distinct'],
+        ], [
+            'ids.required' => 'Pilih minimal satu rapat yang akan dihapus.',
+        ]);
+
+        $jumlah = DB::transaction(function () use ($data) {
+            Absensi::whereIn('rapat_id', $data['ids'])->delete();
+
+            return Rapat::whereIn('id', $data['ids'])->delete();
+        });
+
+        return $this->kembaliKeDashboard($request)
+            ->with('success', "{$jumlah} rapat berhasil dihapus.");
+    }
+
+    /** Kembali ke dashboard dengan pencarian/filter yang sedang aktif (halaman 1) */
+    private function kembaliKeDashboard(Request $request): RedirectResponse
+    {
+        return redirect()->route('admin.dashboard', array_filter($request->only(['q', 'status'])));
     }
 
 }

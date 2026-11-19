@@ -9,6 +9,10 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    @if ($errors->any())
+        <div class="alert alert-danger">{{ $errors->first() }}</div>
+    @endif
+
     {{-- Statistik --}}
     <div class="row g-3 mb-4">
         @foreach ([
@@ -51,12 +55,28 @@
         </div>
     </form>
 
+    {{-- Bar aksi massal (muncul saat ada rapat yang dipilih) --}}
+    <div id="barBulk" class="alert alert-danger py-2 mb-3" hidden>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <span><i class="bi bi-check2-square me-1"></i><strong id="jumlahDipilih">0</strong> rapat dipilih</span>
+            <div class="d-flex gap-2">
+                <button type="button" id="btnBatalPilih" class="btn btn-sm btn-outline-secondary">Batal pilih</button>
+                <button type="button" id="btnHapusTerpilih" class="btn btn-sm btn-danger">
+                    <i class="bi bi-trash me-1"></i>Hapus terpilih
+                </button>
+            </div>
+        </div>
+    </div>
+
     {{-- Tabel rapat --}}
     <div class="card border-0 shadow-sm" style="border-radius: 1rem;">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
+                        <th style="width:40px">
+                            <input type="checkbox" class="form-check-input" id="cekSemua" aria-label="Pilih semua rapat di halaman ini">
+                        </th>
                         <th>Rapat</th>
                         <th>Jadwal</th>
                         <th>Lokasi</th>
@@ -68,6 +88,11 @@
                 <tbody>
                 @forelse ($rapats as $rapat)
                     <tr>
+                        <td>
+                            <input type="checkbox" class="form-check-input cek-rapat" value="{{ $rapat->id }}"
+                                   data-judul="{{ $rapat->judul_rapat }}"
+                                   aria-label="Pilih {{ $rapat->judul_rapat }}">
+                        </td>
                         <td style="min-width: 220px;">
                             <a href="{{ route('admin.rapat.show', $rapat->id) }}" class="fw-semibold text-decoration-none">
                                 {{ $rapat->judul_rapat }}
@@ -91,10 +116,16 @@
                             <a href="{{ route('admin.rapat.pdf', $rapat->id) }}" class="btn btn-sm btn-outline-danger" title="Unduh PDF">
                                 <i class="bi bi-file-earmark-pdf"></i>
                             </a>
+                            <button type="button" class="btn btn-sm btn-danger btn-hapus" title="Hapus rapat"
+                                    data-url="{{ route('admin.rapat.destroy', $rapat->id) }}"
+                                    data-judul="{{ $rapat->judul_rapat }}"
+                                    data-hadir="{{ $rapat->absensis_count }}">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="text-center text-secondary py-5">Belum ada rapat.</td></tr>
+                    <tr><td colspan="7" class="text-center text-secondary py-5">Belum ada rapat.</td></tr>
                 @endforelse
                 </tbody>
             </table>
@@ -104,4 +135,144 @@
     <div class="d-flex justify-content-center mt-4">
         {{ $rapats->links('pagination::bootstrap-5') }}
     </div>
+
+    {{-- Form penghapusan (dipakai bersama untuk hapus satu dan hapus massal) --}}
+    <form method="POST" id="formHapus" action="">
+        @csrf
+        @method('DELETE')
+        <input type="hidden" name="q" value="{{ $search }}">
+        <input type="hidden" name="status" value="{{ $filter }}">
+        <div id="idsWrap"></div>
+    </form>
+
+    {{-- Modal konfirmasi --}}
+    <div class="modal fade" id="hapusModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-6 text-danger">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i><span id="hapusJudul">Hapus rapat?</span>
+                    </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="hapusIsi"></div>
+                    <p class="small text-secondary mb-0 mt-2">
+                        Seluruh data kehadiran peserta pada rapat tersebut, termasuk tanda tangan dan foto,
+                        ikut terhapus permanen dan tidak dapat dikembalikan.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" form="formHapus" class="btn btn-danger" id="btnKonfirmasiHapus">
+                        <i class="bi bi-trash me-1"></i>Ya, hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
+
+@push('scripts')
+<script>
+(() => {
+    const modal      = new bootstrap.Modal(document.getElementById('hapusModal'));
+    const form       = document.getElementById('formHapus');
+    const idsWrap    = document.getElementById('idsWrap');
+    const judulEl    = document.getElementById('hapusJudul');
+    const isiEl      = document.getElementById('hapusIsi');
+    const btnOk      = document.getElementById('btnKonfirmasiHapus');
+    const bar        = document.getElementById('barBulk');
+    const jumlahEl   = document.getElementById('jumlahDipilih');
+    const cekSemua   = document.getElementById('cekSemua');
+    const cekList    = [...document.querySelectorAll('.cek-rapat')];
+    const urlMassal  = @json(route('admin.rapat.destroy-many'));
+
+    // Semua teks dari data rapat dimasukkan lewat textContent agar aman dari XSS
+    const para = (teks) => {
+        const p = document.createElement('p');
+        p.className = 'mb-1';
+        p.textContent = teks;
+        return p;
+    };
+
+    /* ---------- Hapus satu rapat ---------- */
+    document.querySelectorAll('.btn-hapus').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const hadir = Number(btn.dataset.hadir);
+
+            form.action = btn.dataset.url;
+            idsWrap.replaceChildren();
+            judulEl.textContent = 'Hapus rapat ini?';
+            isiEl.replaceChildren(
+                para('"' + btn.dataset.judul + '"'),
+                para(hadir > 0
+                    ? 'Rapat ini memiliki ' + hadir + ' data kehadiran.'
+                    : 'Rapat ini belum memiliki data kehadiran.')
+            );
+            btnOk.disabled = false;
+            modal.show();
+        });
+    });
+
+    /* ---------- Pilih beberapa rapat ---------- */
+    function perbarui() {
+        const dipilih = cekList.filter(c => c.checked);
+        jumlahEl.textContent = dipilih.length;
+        bar.hidden = dipilih.length === 0;
+        cekSemua.checked = dipilih.length > 0 && dipilih.length === cekList.length;
+        cekSemua.indeterminate = dipilih.length > 0 && dipilih.length < cekList.length;
+    }
+
+    cekSemua.addEventListener('change', () => {
+        cekList.forEach(c => { c.checked = cekSemua.checked; });
+        perbarui();
+    });
+    cekList.forEach(c => c.addEventListener('change', perbarui));
+
+    document.getElementById('btnBatalPilih').addEventListener('click', () => {
+        cekList.forEach(c => { c.checked = false; });
+        perbarui();
+    });
+
+    /* ---------- Hapus beberapa rapat ---------- */
+    document.getElementById('btnHapusTerpilih').addEventListener('click', () => {
+        const dipilih = cekList.filter(c => c.checked);
+        if (!dipilih.length) return;
+
+        form.action = urlMassal;
+        idsWrap.replaceChildren(...dipilih.map(c => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'ids[]';
+            input.value = c.value;
+            return input;
+        }));
+
+        judulEl.textContent = 'Hapus ' + dipilih.length + ' rapat terpilih?';
+
+        const daftar = document.createElement('ul');
+        daftar.className = 'mb-1 ps-3';
+        dipilih.slice(0, 5).forEach(c => {
+            const li = document.createElement('li');
+            li.textContent = c.dataset.judul;
+            daftar.appendChild(li);
+        });
+        if (dipilih.length > 5) {
+            const li = document.createElement('li');
+            li.textContent = 'dan ' + (dipilih.length - 5) + ' rapat lainnya';
+            daftar.appendChild(li);
+        }
+
+        isiEl.replaceChildren(daftar);
+        btnOk.disabled = false;
+        modal.show();
+    });
+
+    // Cegah klik ganda saat penghapusan dikirim
+    form.addEventListener('submit', () => { btnOk.disabled = true; });
+
+    perbarui();
+})();
+</script>
+@endpush
