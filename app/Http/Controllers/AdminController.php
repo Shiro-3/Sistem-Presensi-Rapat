@@ -126,6 +126,44 @@ class AdminController extends Controller
             'X-Content-Type-Options' => 'nosniff',
         ]);
     }
+    /** Ubah foto base64 menjadi thumbnail JPEG kecil khusus untuk PDF */
+    private function fotoUntukPdf(?string $raw, int $tinggi = 160): ?string
+    {
+        if (blank($raw)) {
+            return null;
+        }
+
+        $pos = strpos($raw, ',');
+        if ($pos === false) {
+            return null;
+        }
+
+        $binary = base64_decode(substr($raw, $pos + 1), true);
+        if ($binary === false) {
+            return null;
+        }
+
+        $img = @imagecreatefromstring($binary);
+        if ($img === false) {
+            return null;
+        }
+
+        $w = imagesx($img);
+        $h = imagesy($img);
+
+        if ($h > $tinggi) {
+            $kecil = imagescale($img, (int) round($w * $tinggi / $h), $tinggi);
+            if ($kecil !== false) {
+                $img = $kecil;
+            }
+        }
+
+        ob_start();
+        imagejpeg($img, null, 70);
+        $jpeg = ob_get_clean();
+
+        return 'data:image/jpeg;base64,' . base64_encode($jpeg);
+    }
 
     /** Unduh rekap kehadiran dalam PDF */
     public function exportPdf(int $id)
@@ -134,6 +172,13 @@ class AdminController extends Controller
         @set_time_limit(120);
 
         $rapat = Rapat::with(['absensis' => fn ($q) => $q->orderBy('waktu_hadir')])->findOrFail($id);
+
+        // Foto bukti: kecilkan dulu agar PDF tidak membengkak
+        if ($rapat->minta_foto) {
+            foreach ($rapat->absensis as $absensi) {
+                $absensi->foto = $this->fotoUntukPdf($absensi->foto);
+            }
+        }
 
         $pdf = Pdf::loadView('admin.pdf_rekap', [
             'rapat'       => $rapat,

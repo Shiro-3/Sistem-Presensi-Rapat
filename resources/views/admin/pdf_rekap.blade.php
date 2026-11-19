@@ -24,6 +24,7 @@
         table.hadir tr { page-break-inside: avoid; }
         .c { text-align: center; }
         .ttd img { width: 80px; }
+        .foto img { height: 55px; }
 
         .cetak { margin-top: 14px; font-size: 8px; color: #555; }
     </style>
@@ -41,15 +42,24 @@
     </table>
 
     {{-- Daftar hadir --}}
+    @php
+        $lebar = $rapat->minta_foto
+            ? ['no' => 5, 'nama' => 22, 'jabatan' => 16, 'unit' => 16, 'waktu' => 9, 'ttd' => 16, 'foto' => 16]
+            : ['no' => 6, 'nama' => 28, 'jabatan' => 20, 'unit' => 20, 'waktu' => 10, 'ttd' => 16];
+    @endphp
+
     <table class="hadir">
         <thead>
             <tr>
-                <th style="width:5%">No</th>
-                <th style="width:22%">Nama Lengkap</th>
-                <th style="width:16%">Jabatan</th>
-                <th style="width:16%">Unit Kerja</th>
-                <th style="width:10%">Waktu Hadir</th>
-                <th style="width:16%">Tanda Tangan</th>
+                <th style="width:{{ $lebar['no'] }}%">No</th>
+                <th style="width:{{ $lebar['nama'] }}%">Nama Lengkap</th>
+                <th style="width:{{ $lebar['jabatan'] }}%">Jabatan</th>
+                <th style="width:{{ $lebar['unit'] }}%">Unit Kerja</th>
+                <th style="width:{{ $lebar['waktu'] }}%">Waktu Hadir</th>
+                <th style="width:{{ $lebar['ttd'] }}%">Tanda Tangan</th>
+                @if ($rapat->minta_foto)
+                    <th style="width:{{ $lebar['foto'] }}%">Foto</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -65,9 +75,22 @@
                         <img src="{{ $a->tanda_tangan }}" alt="">
                     @endif
                 </td>
+                @if ($rapat->minta_foto)
+                    <td class="c foto">
+                        @if ($a->foto)
+                            <img src="{{ $a->foto }}" alt="">
+                        @else
+                            -
+                        @endif
+                    </td>
+                @endif
             </tr>
         @empty
-            <tr><td colspan="7" class="c" style="padding: 18px;">Belum ada peserta yang hadir.</td></tr>
+            <tr>
+                <td colspan="{{ $rapat->minta_foto ? 7 : 6 }}" class="c" style="padding: 18px;">
+                    Belum ada peserta yang hadir.
+                </td>
+            </tr>
         @endforelse
         </tbody>
     </table>
