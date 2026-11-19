@@ -34,11 +34,6 @@
         .c { text-align: center; }
         .ttd img { width: 80px; }
 
-        /* Blok pengesahan */
-        .sah { width: 100%; margin-top: 24px; border-collapse: collapse; page-break-inside: avoid; }
-        .sah td { width: 50%; vertical-align: top; text-align: center; }
-        .sah .ruang { height: 60px; }
-
         .cetak { margin-top: 14px; font-size: 8px; color: #555; }
     </style>
 </head>
@@ -75,7 +70,6 @@
             <tr>
                 <th style="width:5%">No</th>
                 <th style="width:22%">Nama Lengkap</th>
-                <th style="width:15%">NIP</th>
                 <th style="width:16%">Jabatan</th>
                 <th style="width:16%">Unit Kerja</th>
                 <th style="width:10%">Waktu Hadir</th>
@@ -87,7 +81,6 @@
             <tr>
                 <td class="c">{{ $loop->iteration }}</td>
                 <td>{{ $a->nama_lengkap }}</td>
-                <td>{{ $a->nip ?: '-' }}</td>
                 <td>{{ $a->jabatan }}</td>
                 <td>{{ $a->unit_kerja }}</td>
                 <td class="c">{{ $a->waktu_hadir->format('d/m/Y') }}<br>{{ $a->waktu_hadir->format('H:i') }}</td>
@@ -101,19 +94,6 @@
             <tr><td colspan="7" class="c" style="padding: 18px;">Belum ada peserta yang hadir.</td></tr>
         @endforelse
         </tbody>
-    </table>
-
-    {{-- Pengesahan --}}
-    <table class="sah">
-        <tr>
-            <td></td>
-            <td>
-                {{ $instansi['kota'] }}, {{ $rapat->tanggal_rapat->translatedFormat('d F Y') }}<br>
-                {{ $instansi['penandatangan_jabatan'] }},
-                <div class="ruang"></div>
-                <strong><u>{{ $instansi['penandatangan_nama'] ?: '........................................' }}</u></strong>
-            </td>
-        </tr>
     </table>
 
     <div class="cetak">
