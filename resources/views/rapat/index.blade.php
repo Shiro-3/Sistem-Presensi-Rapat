@@ -12,7 +12,7 @@
         @auth
             <a href="{{ route('admin.dashboard') }}"
             class="btn btn-primary btn-sm d-inline-flex align-items-center justify-content-center">
-                <i class="bi bi-house-door"></i> Kembali ke Dashboard
+                <i class="bi bi-house-door"></i> Dashboard
             </a>
         @endauth
     </section>
