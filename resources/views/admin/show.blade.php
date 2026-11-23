@@ -71,13 +71,13 @@
                         <th>Nama</th>
                         <th>Jabatan</th>
                         <th>Unit Kerja</th>
+                        @if ($rapat->minta_email)
+                            <th>Email</th>
+                        @endif
                         <th>Waktu Hadir</th>
                         <th>Tanda Tangan</th>
                         @if ($rapat->minta_foto)
                             <th>Foto</th>
-                        @endif
-                        @if ($rapat->minta_email)
-                            <th>Email</th>
                         @endif
                     </tr>
                 </thead>
