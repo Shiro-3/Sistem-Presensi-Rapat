@@ -68,7 +68,8 @@ class AdminController extends Controller
         $rapat = new Rapat($request->validated());
         $rapat->slug       = (Str::slug($rapat->judul_rapat) ?: 'rapat') . '-' . Str::lower(Str::random(6));
         $rapat->status     = 'aktif';
-        $rapat->minta_foto = $request->boolean('minta_foto') ? 1 : 0;
+        $rapat->minta_foto  = $request->boolean('minta_foto') ? 1 : 0;
+        $rapat->minta_email = $request->boolean('minta_email') ? 1 : 0;
         $rapat->save();
 
         return redirect()
@@ -84,7 +85,7 @@ class AdminController extends Controller
         // Kolom tanda_tangan (base64) sengaja tidak dimuat di daftar agar halaman ringan;
         // gambarnya diambil per baris lewat route admin.absensi.ttd.
         $absensis = $rapat->absensis()
-            ->select(['id', 'rapat_id', 'nama_lengkap', 'jabatan', 'unit_kerja', 'waktu_hadir'])
+            ->select(['id', 'rapat_id', 'nama_lengkap', 'jabatan', 'unit_kerja', 'email', 'waktu_hadir'])
             ->orderBy('waktu_hadir')
             ->paginate(25);
 

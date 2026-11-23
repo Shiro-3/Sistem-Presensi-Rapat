@@ -23,6 +23,7 @@ class StoreRapatRequest extends FormRequest
             'tipe_lokasi'   => ['required', Rule::in(Rapat::TIPE_LOKASI)],
             'detail_lokasi' => ['required', 'string', 'max:1000'],
             'minta_foto' => ['nullable', 'boolean'],
+            'minta_email' => ['nullable', 'boolean'],
         ];
     }
 
@@ -36,6 +37,7 @@ class StoreRapatRequest extends FormRequest
             'tipe_lokasi'   => 'tipe lokasi',
             'detail_lokasi' => 'detail lokasi',
             'minta_foto'    => 'foto bukti',
+            'minta_email'    => 'email peserta',
         ];
     }
 

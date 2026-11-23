@@ -74,13 +74,23 @@
                     @error('jabatan') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
-                <div class="mb-4">
+                <div class="{{ $rapat->minta_email ? 'mb-3' : 'mb-4' }}">
                     <label for="unit_kerja" class="form-label">Unit Kerja <span class="text-danger">*</span></label>
                     <input type="text" id="unit_kerja" name="unit_kerja" maxlength="255"
                            class="form-control form-control-lg @error('unit_kerja') is-invalid @enderror"
                            value="{{ old('unit_kerja') }}" autocomplete="organization" required>
                     @error('unit_kerja') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
+
+                @if ($rapat->minta_email)
+                <div class="mb-4">
+                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                    <input type="email" id="email" name="email" maxlength="255"
+                        class="form-control form-control-lg @error('email') is-invalid @enderror"
+                        value="{{ old('email') }}" autocomplete="email" inputmode="email" required>
+                    @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+            @endif
 
                 {{-- Tanda tangan (selalu ada) --}}
                 <h2 class="h6 fw-bold mb-2"><i class="bi bi-pen me-2"></i>Tanda Tangan <span class="text-danger">*</span></h2>

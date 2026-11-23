@@ -31,6 +31,11 @@
                             <i class="bi bi-camera me-1"></i>Foto bukti diminta
                         </span>
                     @endif
+                    @if ($rapat->minta_email)
+                        <span class="badge rounded-pill text-bg-info mb-2">
+                            <i class="bi bi-envelope me-1"></i>Email diminta
+                        </span>
+                    @endif
                     <h1 class="h5 fw-bold mb-0">{{ $rapat->judul_rapat }}</h1>
                 </div>
                 <div class="d-flex flex-wrap gap-2 align-self-start">
@@ -71,6 +76,9 @@
                         @if ($rapat->minta_foto)
                             <th>Foto</th>
                         @endif
+                        @if ($rapat->minta_email)
+                            <th>Email</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -80,6 +88,9 @@
                         <td class="fw-semibold">{{ $a->nama_lengkap }}</td>
                         <td>{{ $a->jabatan }}</td>
                         <td>{{ $a->unit_kerja }}</td>
+                        @if ($rapat->minta_email)
+                            <td class="text-break">{{ $a->email ?: '-' }}</td>
+                        @endif
                         <td class="small text-nowrap">
                             {{ $a->waktu_hadir->translatedFormat('d M Y') }}<br>
                             <span class="text-secondary">{{ $a->waktu_hadir->format('H:i:s') }}</span>
@@ -99,7 +110,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="{{ $rapat->minta_foto ? 7 : 6 }}" class="text-center text-secondary py-5">
+                        <td colspan="{{ 6 + ($rapat->minta_foto ? 1 : 0) + ($rapat->minta_email ? 1 : 0) }}" class="text-center text-secondary py-5">
                             Belum ada peserta yang hadir.
                         </td>
                     </tr>

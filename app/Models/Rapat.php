@@ -27,12 +27,14 @@ class Rapat extends Model
         'tipe_lokasi',
         'detail_lokasi',
         'minta_foto',
+        'minta_email',
         'status',
     ];
 
     protected $casts = [
         'tanggal_rapat' => 'date:Y-m-d',
         'minta_foto'   => 'boolean',
+        'minta_email'   => 'boolean',
     ];
 
     protected $appends = ['status_otomatis'];

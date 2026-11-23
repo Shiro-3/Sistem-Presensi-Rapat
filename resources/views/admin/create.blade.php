@@ -59,7 +59,7 @@
                     @error('detail_lokasi') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-3">
                     <input type="hidden" name="minta_foto" value="0">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="minta_foto"
@@ -68,6 +68,19 @@
                     </div>
                     <div class="form-text">
                         Jika aktif, peserta wajib mengambil foto lewat kamera perangkat, selain tanda tangan.
+                        Pilihan ini ditentukan saat rapat dibuat.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <input type="hidden" name="minta_email" value="0">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="minta_email"
+                            name="minta_email" value="1" @checked(old('minta_email'))>
+                        <label class="form-check-label" for="minta_email">Minta email dari peserta</label>
+                    </div>
+                    <div class="form-text">
+                        Jika aktif, form presensi menampilkan kolom email di bawah Unit Kerja dan peserta wajib mengisinya.
                         Pilihan ini ditentukan saat rapat dibuat.
                     </div>
                 </div>

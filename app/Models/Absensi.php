@@ -17,6 +17,7 @@ class Absensi extends Model
         'nama_lengkap',
         'jabatan',
         'unit_kerja',
+        'email',
         'tanda_tangan',
         'foto',
         'waktu_hadir',

@@ -31,6 +31,10 @@ class StorePresensiRequest extends FormRequest
         if ($rapat && $rapat->minta_foto) {
             $rules['foto'] = ['required', 'string', 'max:2000000', $this->gambarBase64(['jpeg', 'png'], 'foto')];
         }
+        // Email hanya diminta jika admin mengaktifkannya pada rapat ini
+        if ($rapat && $rapat->minta_email) {
+            $rules['email'] = ['required', 'email', 'max:255'];
+        }
 
         return $rules;
     }
@@ -71,6 +75,7 @@ class StorePresensiRequest extends FormRequest
             'max'              => ':Attribute terlalu panjang.',
             'tanda_tangan.max' => 'Ukuran tanda tangan terlalu besar.',
             'foto.max'         => 'Ukuran foto terlalu besar.',
+            'email.email'      => 'Format email tidak valid.',
         ];
     }
 }

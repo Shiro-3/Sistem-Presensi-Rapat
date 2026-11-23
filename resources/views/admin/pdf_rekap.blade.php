@@ -5,7 +5,7 @@
     <title>Rekap Absensi - {{ $rapat->judul_rapat }}</title>
     <style>
         @page { margin: 25px 40px 56px 40px; }
-        body { font-family: 'Helvetica', sans-serif; font-size: 10px; color: #111; }
+        body { font-family: 'Arial', sans-serif; font-size: 10px; color: #111; }
         
         /* Kop instansi */
         .kop { width: 100%; table-layout: fixed; border-collapse: collapse; border-bottom: 3px double #000; margin: 0 0 14px 0; }

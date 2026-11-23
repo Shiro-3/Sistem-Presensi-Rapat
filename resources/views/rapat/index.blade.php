@@ -3,9 +3,18 @@
 @section('title', 'Katalog Rapat')
 
 @section('content')
-    <section class="mb-3">
-        <h1 class="h4 fw-bold mb-1">Katalog Rapat</h1>
-        <p class="text-secondary small mb-0">Pilih rapat, lalu isi presensi dengan tanda tangan digital.</p>
+    <section class="mb-3 d-flex flex-wrap align-items-start justify-content-between gap-2">
+        <div>
+            <h1 class="h4 fw-bold mb-1">Katalog Rapat</h1>
+            <p class="text-secondary small mb-0">Pilih rapat, lalu isi presensi dengan tanda tangan digital.</p>
+        </div>
+
+        @auth
+            <a href="{{ route('admin.dashboard') }}"
+            class="btn btn-primary btn-sm d-inline-flex align-items-center justify-content-center">
+                <i class="bi bi-house-door"></i> Kembali ke Dashboard
+            </a>
+        @endauth
     </section>
 
     {{-- Pencarian (live) --}}
