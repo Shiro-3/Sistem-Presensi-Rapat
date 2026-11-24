@@ -35,7 +35,7 @@
     </main>
 
     <footer class="text-center text-secondary small py-3">
-        &copy; {{ date('Y') }} Stasiun PSDKP Cilacap
+        &copy; {{ date('Y') }} Pangkalan PSDKP Cilacap
     </footer>
 
     <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" id="toastWrap"></div>
