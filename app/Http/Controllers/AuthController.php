@@ -6,6 +6,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -21,9 +22,11 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        $credentials['email'] = Str::lower($credentials['email']);
+
+        if (! Auth::attempt([...$credentials, 'aktif' => 1], $request->boolean('remember'))) {
             return back()
-                ->withErrors(['email' => 'Email atau password salah.'])
+                ->withErrors(['email' => 'Email atau password salah, atau akun dinonaktifkan.'])
                 ->onlyInput('email');
         }
 
