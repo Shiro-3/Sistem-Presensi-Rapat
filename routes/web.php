@@ -34,6 +34,11 @@ Route::prefix('rapat/{slug}')
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])
+        ->name('login');
+    Route::post('/login', [AuthController::class, 'login'])
+        ->middleware('throttle:5,1')
+        ->name('login.attempt');
     Route::get('/akun/password', [AkunController::class, 'edit'])->name('password.edit');
     Route::put('/akun/password', [AkunController::class, 'update'])
         ->middleware('throttle:5,1')
