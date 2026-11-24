@@ -37,6 +37,7 @@
         .c { text-align: center; }
         .ttd img { width: 80px; }
         .foto img { height: 55px; }
+        table.hadir td.email { font-size: 9px; }
 
         .cetak { margin-top: 14px; font-size: 8px; color: #555; }
     </style>
@@ -73,9 +74,18 @@
 
     {{-- Daftar hadir --}}
     @php
-        $lebar = $rapat->minta_foto
-            ? ['no' => 5, 'nama' => 22, 'jabatan' => 16, 'unit' => 16, 'waktu' => 9, 'ttd' => 16, 'foto' => 16]
-            : ['no' => 6, 'nama' => 28, 'jabatan' => 20, 'unit' => 20, 'waktu' => 10, 'ttd' => 16];
+        $adaFoto  = (bool) $rapat->minta_foto;
+        $adaEmail = (bool) $rapat->minta_email;
+
+        $lebar = match (true) {
+            // Foto + email: 8 kolom (kertas lanskap)
+            $adaFoto && $adaEmail => ['no' => 4, 'nama' => 17, 'jabatan' => 13, 'unit' => 15, 'email' => 18, 'waktu' => 8, 'ttd' => 12, 'foto' => 13],
+            $adaEmail             => ['no' => 5, 'nama' => 21, 'jabatan' => 15, 'unit' => 16, 'email' => 20, 'waktu' => 9, 'ttd' => 14],
+            $adaFoto              => ['no' => 5, 'nama' => 22, 'jabatan' => 16, 'unit' => 16, 'waktu' => 9, 'ttd' => 16, 'foto' => 16],
+            default               => ['no' => 6, 'nama' => 28, 'jabatan' => 20, 'unit' => 20, 'waktu' => 10, 'ttd' => 16],
+        };
+
+        $jumlahKolom = 6 + ($adaFoto ? 1 : 0) + ($adaEmail ? 1 : 0);
     @endphp
 
     <table class="hadir">
@@ -85,9 +95,12 @@
                 <th style="width:{{ $lebar['nama'] }}%">Nama Lengkap</th>
                 <th style="width:{{ $lebar['jabatan'] }}%">Jabatan</th>
                 <th style="width:{{ $lebar['unit'] }}%">Unit Kerja</th>
+                @if ($adaEmail)
+                    <th style="width:{{ $lebar['email'] }}%">Email</th>
+                @endif
                 <th style="width:{{ $lebar['waktu'] }}%">Waktu Hadir</th>
                 <th style="width:{{ $lebar['ttd'] }}%">Tanda Tangan</th>
-                @if ($rapat->minta_foto)
+                @if ($adaFoto)
                     <th style="width:{{ $lebar['foto'] }}%">Foto</th>
                 @endif
             </tr>
@@ -99,13 +112,16 @@
                 <td>{{ $a->nama_lengkap }}</td>
                 <td>{{ $a->jabatan }}</td>
                 <td>{{ $a->unit_kerja }}</td>
+                @if ($adaEmail)
+                    <td class="email">{{ $a->email ?: '-' }}</td>
+                @endif
                 <td class="c">{{ $a->waktu_hadir->format('d/m/Y') }}<br>{{ $a->waktu_hadir->format('H:i') }}</td>
                 <td class="c ttd">
                     @if ($a->tanda_tangan)
                         <img src="{{ $a->tanda_tangan }}" alt="">
                     @endif
                 </td>
-                @if ($rapat->minta_foto)
+                @if ($adaFoto)
                     <td class="c foto">
                         @if ($a->foto)
                             <img src="{{ $a->foto }}" alt="">
@@ -117,7 +133,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="{{ $rapat->minta_foto ? 7 : 6 }}" class="c" style="padding: 18px;">
+                <td colspan="{{ $jumlahKolom }}" class="c" style="padding: 18px;">
                     Belum ada peserta yang hadir.
                 </td>
             </tr>
