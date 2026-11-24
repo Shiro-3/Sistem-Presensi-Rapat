@@ -20,7 +20,7 @@
                 <img src="{{ asset('images/logo_PSDKP.png') }}" alt="Logo" class="brand-logo-img">
                 <span class="lh-1">
                     <span class="d-block fw-bold fs-6">Sistem Presensi Rapat Digital</span>
-                    <small class="text-secondary fw-normal" style="font-size:.72rem">Stasiun PSDKP Cilacap</small>
+                    <small class="text-secondary fw-normal" style="font-size:.72rem">Pangkalan PSDKP Cilacap</small>
                 </span>
             </a>
             <a href="{{ Route::has('login') ? route('login') : '#' }}" class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1">
