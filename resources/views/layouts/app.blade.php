@@ -26,7 +26,7 @@
             @auth
                 <a href="{{ route('admin.dashboard') }}"
                 class="btn btn-primary btn-sm d-flex align-items-center gap-1">
-                    <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+                    <i class="bi bi-person-check"></i><span>Admin</span>
                 </a>
             @else
                 <a href="{{ route('login') }}"
