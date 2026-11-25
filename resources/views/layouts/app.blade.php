@@ -23,10 +23,18 @@
                     <small class="text-secondary fw-normal" style="font-size:.72rem">Pangkalan PSDKP Cilacap</small>
                 </span>
             </a>
-            <a href="{{ Route::has('login') ? route('login') : '#' }}" class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1">
-                <i class="bi bi-person-lock"></i>
-                <span><span class="d-none d-sm-inline">Login </span>Admin</span>
-            </a>
+            @auth
+                <a href="{{ route('admin.dashboard') }}"
+                class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+                    <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+                </a>
+            @else
+                <a href="{{ route('login') }}"
+                class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1">
+                    <i class="bi bi-person-lock"></i>
+                    <span><span class="d-none d-sm-inline">Login </span>Admin</span>
+                </a>
+            @endauth
         </div>
     </header>
 
