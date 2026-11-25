@@ -165,10 +165,23 @@
                     </h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
-                @endif
+                <div class="modal-body">
+                    <div id="hapusIsi"></div>
+                    <p class="small text-secondary mb-0 mt-2">
+                        Seluruh data kehadiran peserta pada rapat tersebut, termasuk tanda tangan dan foto,
+                        ikut terhapus permanen dan tidak dapat dikembalikan.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" form="formHapus" class="btn btn-danger" id="btnKonfirmasiHapus">
+                        <i class="bi bi-trash me-1"></i>Ya, hapus
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+    @endif
 @endsection
 
 @if ($bolehHapus)
