@@ -4,6 +4,7 @@
 
 @section('content')
     @include('admin._nav')
+    @php($bolehHapus = auth()->user()->can('hapus-rapat'))
 
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -56,7 +57,7 @@
     </form>
 
     {{-- Bar aksi massal (muncul saat ada rapat yang dipilih) --}}
-    @can
+    @if ($bolehHapus)
     <div id="barBulk" class="alert alert-danger py-2 mb-3" hidden>
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
             <span><i class="bi bi-check2-square me-1"></i><strong id="jumlahDipilih">0</strong> rapat dipilih</span>
@@ -68,7 +69,7 @@
             </div>
         </div>
     </div>
-    @endcan
+    @endif
 
     {{-- Tabel rapat --}}
     <div class="card border-0 shadow-sm" style="border-radius: 1rem;">
@@ -76,29 +77,29 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        @can
+                        @if ($bolehHapus)
                         <th style="width:40px">
                             <input type="checkbox" class="form-check-input" id="cekSemua" aria-label="Pilih semua rapat di halaman ini">
                         </th>
+                        @endif
                         <th>Rapat</th>
                         <th>Jadwal</th>
                         <th>Lokasi</th>
                         <th class="text-center">Hadir</th>
                         <th>Status</th>
                         <th class="text-end">Aksi</th>
-                        @endcan
                     </tr>
                 </thead>
                 <tbody>
                 @forelse ($rapats as $rapat)
                     <tr>
-                        @can('kelola-rapat')
+                        @if ($bolehHapus)
                         <td>
                             <input type="checkbox" class="form-check-input cek-rapat" value="{{ $rapat->id }}"
                                    data-judul="{{ $rapat->judul_rapat }}"
                                    aria-label="Pilih {{ $rapat->judul_rapat }}">
                         </td>
-                        @endcan
+                        @endif
                         <td style="min-width: 220px;">
                             <a href="{{ route('admin.rapat.show', $rapat->id) }}" class="fw-semibold text-decoration-none">
                                 {{ $rapat->judul_rapat }}
@@ -122,18 +123,18 @@
                             <a href="{{ route('admin.rapat.pdf', $rapat->id) }}" class="btn btn-sm btn-outline-danger" title="Unduh PDF">
                                 <i class="bi bi-file-earmark-pdf"></i>
                             </a>
-                            @can('kelola-rapat')
+                            @if ($bolehHapus)
                             <button type="button" class="btn btn-sm btn-danger btn-hapus" title="Hapus rapat"
                                     data-url="{{ route('admin.rapat.destroy', $rapat->id) }}"
                                     data-judul="{{ $rapat->judul_rapat }}"
                                     data-hadir="{{ $rapat->absensis_count }}">
                                 <i class="bi bi-trash"></i>
                             </button>
-                            @endcan
+                            @endif
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="{{ auth()->user()->can('hapus-rapat') ? 7 : 6 }}" class="text-center text-secondary py-5">Belum ada rapat.</td></tr>
+                    <tr><td colspan="{{ $bolehHapus ? 7 : 6 }}" class="text-center text-secondary py-5">Belum ada rapat.</td></tr>
                 @endforelse
                 </tbody>
             </table>
@@ -144,8 +145,8 @@
         {{ $rapats->links('pagination::bootstrap-5') }}
     </div>
 
-    @can('kelola-rapat')
     {{-- Form penghapusan (dipakai bersama untuk hapus satu dan hapus massal) --}}
+    @if ($bolehHapus)
     <form method="POST" id="formHapus" action="">
         @csrf
         @method('DELETE')
@@ -153,9 +154,7 @@
         <input type="hidden" name="status" value="{{ $filter }}">
         <div id="idsWrap"></div>
     </form>
-    @endcan
 
-    @can('kelola-rapat')
     {{-- Modal konfirmasi --}}
     <div class="modal fade" id="hapusModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -166,7 +165,7 @@
                     </h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
-                @endcan
+                @endif
                 <div class="modal-body">
                     <div id="hapusIsi"></div>
                     <p class="small text-secondary mb-0 mt-2">
@@ -185,7 +184,7 @@
     </div>
 @endsection
 
-@can('kelola-rapat')
+@if ($bolehHapus)
 @push('scripts')
 <script>
 (() => {
@@ -289,4 +288,4 @@
 })();
 </script>
 @endpush
-@endcan
+@endif
